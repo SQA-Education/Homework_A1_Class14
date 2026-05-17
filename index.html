@@ -101,10 +101,13 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#f0edf6;
 </div>
 <div style="margin:10px 0">
 <label style="font-weight:600;color:#5B5091">Your Class:</label>
-<select class="class-select" id="studentClass">
+<input type="hidden" id="teacherName" value="">
+<select class="class-select"  id="className" onchange="setTeacher(this)">
 <option value="">-- Select your class --</option>
-<option value="3087">3087 — Mon/Wed 11:00 AM – PS1 (A1) – Eunice Salazar</option>
-<option value="3097">3097 — Tue/Thu 6:30 PM – PS1 (A1) – Eunice Salazar</option>
+<optgroup label="Eunice Salazar">
+<option value="3087" data-teacher="Eunice Salazar">3087 - Mon/Wed 11:00 AM (Eunice)</option>
+<option value="3097" data-teacher="Eunice Salazar">3097 - Tue/Thu 6:30 PM (Eunice)</option>
+</optgroup>
 </select>
 </div>
 <button class="btn btn-primary" onclick="startHomework()" style="width:100%">Start Homework →</button>
@@ -243,6 +246,8 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#f0edf6;
 </div>
 
 <script>
+function setTeacher(sel){var opt=sel.options[sel.selectedIndex];var t=document.getElementById("teacherName");if(t)t.value=opt?(opt.getAttribute("data-teacher")||""):"";}
+
 const SESSION='Class 14';
 const SPEAKING_LIMIT=25;
 let sn='',sClass='',sc={l:0,v:0,w:0,s:0,g:0};
@@ -252,7 +257,7 @@ let selectedQ={};
 function goTo(id){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0)}
 function startHomework(){
   sn=document.getElementById('studentName').value.trim();
-  sClass=document.getElementById('studentClass').value;
+  sClass=document.getElementById('className').value;
   if(!sn){alert('Please enter your name');return}
   if(!sClass){alert('Please select your class');return}
   initVocab();initGrammar();goTo('s1');
@@ -530,7 +535,7 @@ function submitToTeacher(){
   const st=spokenTranscript||(stEl?stEl.textContent:'')||'';
   const formData=new FormData();
   formData.append('entry.154629934',sn||'');
-  formData.append('entry.771629595',document.getElementById('studentClass')?document.getElementById('studentClass').value:sClass);
+  formData.append('entry.771629595',document.getElementById('className')?document.getElementById('className').value:sClass);
   formData.append('entry.1564061356',SESSION);
   formData.append('entry.1994438750',sc.l+'/3');
   formData.append('entry.1169985852',sc.v+'/6');
